@@ -13,7 +13,6 @@ paper_jarfile = environ.get('PAPER_JAR')
 panel_key = environ.get('PANEL_KEY')
 panel_url = environ.get('PANEL_URL')
 
-
 panel = pydactyl.PterodactylClient(panel_url, panel_key)
 
 print('Downloading Paper JAR')
@@ -22,8 +21,11 @@ open(paper_jarfile, 'wb').write(request.content)
 
 
 with pysftp.Connection(host=sftp_url, port=sftp_port, username=sftp_user, password=sftp_password) as sftp:
+    print('SFTP connection established')
     sftp.remove(paper_jarfile)
+    print('Old JAR deleted, uploading new...')
     sftp.put(paper_jarfile)
+    print('New JAR uploaded')
 
 servers = panel.client.list_servers()
 server_id = servers[0]['identifier']
