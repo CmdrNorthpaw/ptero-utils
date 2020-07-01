@@ -1,7 +1,7 @@
 import requests
 import pydactyl
 import pysftp
-from os import environ
+from os import environ, remove
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -36,7 +36,8 @@ with pysftp.Connection(host=sftp_url, port=sftp_port, username=sftp_user, passwo
     sftp.remove(paper_jarfile)
     print('Old JAR deleted, uploading new...')
     sftp.put(paper_jarfile)
-    print('New JAR uploaded')
+    print('New JAR uploaded, deleting local copy...')
+    remove(paper_jarfile)
 
 print('Starting server back up...')
 panel.client.send_power_action(server_id, 'start')
